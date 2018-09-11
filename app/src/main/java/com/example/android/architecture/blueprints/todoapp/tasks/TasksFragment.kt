@@ -120,7 +120,7 @@ class TasksFragment : Fragment(), MviView<TasksIntent, TasksViewState> {
   override fun onStop() {
     super.onStop()
 
-    disposables.dispose()
+    disposables.clear()
   }
 
   override fun onActivityResult(

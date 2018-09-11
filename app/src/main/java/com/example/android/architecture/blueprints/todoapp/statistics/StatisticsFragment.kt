@@ -77,7 +77,7 @@ class StatisticsFragment : Fragment(), MviView<StatisticsIntent, StatisticsViewS
 
   override fun onStop() {
     super.onStop()
-    disposables.dispose()
+    disposables.clear()
   }
 
   override fun intents(): Observable<StatisticsIntent> = initialIntent()

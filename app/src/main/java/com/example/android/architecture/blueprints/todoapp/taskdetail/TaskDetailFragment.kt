@@ -112,7 +112,7 @@ class TaskDetailFragment : Fragment(), MviView<TaskDetailIntent, TaskDetailViewS
 
   override fun onStop() {
     super.onStop()
-    disposables.dispose()
+    disposables.clear()
   }
 
   override fun intents(): Observable<TaskDetailIntent> {

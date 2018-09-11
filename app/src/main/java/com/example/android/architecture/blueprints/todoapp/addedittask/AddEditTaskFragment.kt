@@ -99,7 +99,7 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
 
   override fun onStop() {
     super.onStop()
-    disposables.dispose()
+    disposables.clear()
   }
 
   /**
