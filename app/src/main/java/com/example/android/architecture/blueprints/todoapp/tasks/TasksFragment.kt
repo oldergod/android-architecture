@@ -88,11 +88,8 @@ class TasksFragment : Fragment(), MviView<TasksIntent, TasksViewState> {
     listAdapter = TasksAdapter(ArrayList(0))
   }
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
+  override fun onStart() {
+    super.onStart()
 
     bind()
   }
@@ -120,8 +117,8 @@ class TasksFragment : Fragment(), MviView<TasksIntent, TasksViewState> {
     refreshIntentPublisher.onNext(TasksIntent.RefreshIntent(false))
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
+  override fun onStop() {
+    super.onStop()
 
     disposables.dispose()
   }
