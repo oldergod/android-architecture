@@ -55,6 +55,12 @@ public class AddEditTaskFragment extends Fragment implements MviView<AddEditTask
         return new AddEditTaskFragment();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDisposables.dispose();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -76,19 +82,7 @@ public class AddEditTaskFragment extends Fragment implements MviView<AddEditTask
         mViewModel = ViewModelProviders.of(this, ToDoViewModelFactory.getInstance(getContext()))
                 .get(AddEditTaskViewModel.class);
         mDisposables = new CompositeDisposable();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         bind();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mDisposables.clear();
     }
 
     /**

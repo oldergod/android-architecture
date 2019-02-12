@@ -103,15 +103,8 @@ public class TaskDetailFragment extends Fragment implements MviView<TaskDetailIn
         mViewModel = ViewModelProviders.of(this, ToDoViewModelFactory.getInstance(getContext()))
                 .get(TaskDetailViewModel.class);
         mDisposables = new CompositeDisposable();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         bind();
     }
-
 
     /**
      * Connect the {@link MviView} with the {@link MviViewModel}
@@ -131,9 +124,9 @@ public class TaskDetailFragment extends Fragment implements MviView<TaskDetailIn
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mDisposables.clear();
+    public void onDestroy() {
+        super.onDestroy();
+        mDisposables.dispose();
     }
 
     @Override

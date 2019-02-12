@@ -101,12 +101,6 @@ public class TasksFragment extends Fragment
 
         mViewModel = ViewModelProviders.of(this, ToDoViewModelFactory.getInstance(getContext()))
                 .get(TasksViewModel.class);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         bind();
     }
 
@@ -135,9 +129,10 @@ public class TasksFragment extends Fragment
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mDisposables.clear();
+    public void onDestroy() {
+        super.onDestroy();
+
+        mDisposables.dispose();
     }
 
     @Override

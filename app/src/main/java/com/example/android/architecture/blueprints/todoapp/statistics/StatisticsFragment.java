@@ -68,12 +68,6 @@ public class StatisticsFragment extends Fragment
         mViewModel = ViewModelProviders.of(this, ToDoViewModelFactory.getInstance(getContext()))
                 .get(StatisticsViewModel.class);
         mDisposables = new CompositeDisposable();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         bind();
     }
 
@@ -91,9 +85,9 @@ public class StatisticsFragment extends Fragment
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mDisposables.clear();
+    public void onDestroy() {
+        super.onDestroy();
+        mDisposables.dispose();
     }
 
     @Override
