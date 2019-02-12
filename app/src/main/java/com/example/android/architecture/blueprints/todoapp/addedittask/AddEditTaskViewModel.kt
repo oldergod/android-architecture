@@ -33,6 +33,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState
 import com.example.android.architecture.blueprints.todoapp.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -52,6 +53,7 @@ class AddEditTaskViewModel(
    * while the UI disconnects and reconnects on config changes.
    */
   private val intentsSubject: PublishSubject<AddEditTaskIntent> = PublishSubject.create()
+  private val compositeDisposable = CompositeDisposable()
   private val statesObservable: Observable<AddEditTaskViewState> = compose()
 
   /**
@@ -69,7 +71,8 @@ class AddEditTaskViewModel(
     }
 
   override fun processIntents(intents: Observable<AddEditTaskIntent>) {
-    intents.subscribe(intentsSubject)
+    compositeDisposable.clear()
+    compositeDisposable.add(intents.subscribe(intentsSubject::onNext))
   }
 
   override fun states(): Observable<AddEditTaskViewState> = statesObservable

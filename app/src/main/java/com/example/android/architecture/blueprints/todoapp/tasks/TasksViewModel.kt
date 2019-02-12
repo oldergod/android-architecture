@@ -41,6 +41,7 @@ import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewState.
 import com.example.android.architecture.blueprints.todoapp.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -61,6 +62,7 @@ class TasksViewModel(
    * while the UI disconnects and reconnects on config changes.
    */
   private val intentsSubject: PublishSubject<TasksIntent> = PublishSubject.create()
+  private val compositeDisposable = CompositeDisposable()
   private val statesObservable: Observable<TasksViewState> = compose()
 
   /**
@@ -78,7 +80,8 @@ class TasksViewModel(
     }
 
   override fun processIntents(intents: Observable<TasksIntent>) {
-    intents.subscribe(intentsSubject)
+    compositeDisposable.clear()
+    compositeDisposable.add(intents.subscribe(intentsSubject::onNext))
   }
 
   override fun states(): Observable<TasksViewState> = statesObservable
