@@ -55,6 +55,11 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
   private val argumentTaskId: String?
     get() = arguments?.getString(ARGUMENT_EDIT_TASK_ID)
 
+  override fun onDestroy() {
+    super.onDestroy()
+    disposables.dispose()
+  }
+
   override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
@@ -72,10 +77,6 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
     super.onViewCreated(view, savedInstanceState)
     fab = activity!!.findViewById(R.id.fab_edit_task_done)
     fab.setImageResource(R.drawable.ic_done)
-  }
-
-  override fun onStart() {
-    super.onStart()
 
     bind()
   }
@@ -95,11 +96,6 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
 
   override fun intents(): Observable<AddEditTaskIntent> {
     return Observable.merge(initialIntent(), saveTaskIntent())
-  }
-
-  override fun onStop() {
-    super.onStop()
-    disposables.clear()
   }
 
   /**

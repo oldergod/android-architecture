@@ -55,8 +55,8 @@ class StatisticsFragment : Fragment(), MviView<StatisticsIntent, StatisticsViewS
         .also { statisticsTV = it.findViewById(R.id.statistics) }
   }
 
-  override fun onStart() {
-    super.onStart()
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
     bind()
   }
 
@@ -75,9 +75,9 @@ class StatisticsFragment : Fragment(), MviView<StatisticsIntent, StatisticsViewS
     viewModel.processIntents(intents())
   }
 
-  override fun onStop() {
-    super.onStop()
-    disposables.clear()
+  override fun onDestroy() {
+    super.onDestroy()
+    disposables.dispose()
   }
 
   override fun intents(): Observable<StatisticsIntent> = initialIntent()
