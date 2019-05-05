@@ -31,6 +31,7 @@ import com.example.android.architecture.blueprints.todoapp.statistics.Statistics
 import com.example.android.architecture.blueprints.todoapp.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.Observer
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -66,9 +67,7 @@ class StatisticsViewModel(
       }
     }
 
-  override fun processIntents(intents: Observable<StatisticsIntent>) {
-    intents.subscribe(intentsSubject)
-  }
+  override val intentsObserver: Observer<StatisticsIntent> get() = intentsSubject
 
   override fun states(): Observable<StatisticsViewState> = statesObservable
 

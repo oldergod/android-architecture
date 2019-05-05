@@ -54,10 +54,10 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
 
   private val argumentTaskId: String?
     get() = arguments?.getString(ARGUMENT_EDIT_TASK_ID)
-
-  override fun onDestroy() {
-    super.onDestroy()
-    disposables.dispose()
+  
+  override fun onStop() {
+    super.onStop()
+    disposables.clear()
   }
 
   override fun onCreateView(
@@ -77,7 +77,10 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
     super.onViewCreated(view, savedInstanceState)
     fab = activity!!.findViewById(R.id.fab_edit_task_done)
     fab.setImageResource(R.drawable.ic_done)
-
+  }
+  
+  override fun onStart() {
+    super.onStart()
     bind()
   }
 
@@ -88,10 +91,12 @@ class AddEditTaskFragment : Fragment(), MviView<AddEditTaskIntent, AddEditTaskVi
    * emitted [MviViewState]s could be lost
    */
   private fun bind() {
-    // Subscribe to the ViewModel and call render for every emitted state
-    disposables.add(viewModel.states().subscribe(this::render))
-    // Pass the UI's intents to the ViewModel
-    viewModel.processIntents(intents())
+    disposables.addAll(
+        // Subscribe to the ViewModel and call render for every emitted state
+        viewModel.states().subscribe(this::render),
+        // Pass the UI's intents to the ViewModel
+        intents().subscribe(viewModel.intentsObserver::onNext)
+    )
   }
 
   override fun intents(): Observable<AddEditTaskIntent> {

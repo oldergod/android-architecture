@@ -1,6 +1,7 @@
 package com.example.android.architecture.blueprints.todoapp.mvibase
 
 import io.reactivex.Observable
+import io.reactivex.Observer
 
 /**
  * Object that will subscribes to a [MviView]'s [MviIntent]s,
@@ -11,7 +12,7 @@ import io.reactivex.Observable
  * @param S Top class of the [MviViewState] the [MviViewModel] will be emitting.
  */
 interface MviViewModel<I : MviIntent, S : MviViewState> {
-  fun processIntents(intents: Observable<I>)
+  val intentsObserver: Observer<I>
 
   fun states(): Observable<S>
 }
