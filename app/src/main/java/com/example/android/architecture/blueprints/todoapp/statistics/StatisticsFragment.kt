@@ -54,9 +54,9 @@ class StatisticsFragment : Fragment(), MviView<StatisticsIntent, StatisticsViewS
     return inflater.inflate(R.layout.statistics_frag, container, false)
         .also { statisticsTV = it.findViewById(R.id.statistics) }
   }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+  
+  override fun onStart() {
+    super.onStart()
     bind()
   }
 
@@ -67,17 +67,17 @@ class StatisticsFragment : Fragment(), MviView<StatisticsIntent, StatisticsViewS
    * emitted [MviViewState]s could be lost.
    */
   private fun bind() {
-    // Subscribe to the ViewModel and call render for every emitted state
-    disposables.add(
-        viewModel.states().subscribe { this.render(it) }
+    disposables.addAll(
+        // Subscribe to the ViewModel and call render for every emitted state
+        viewModel.states().subscribe { this.render(it) },
+        // Pass the UI's intents to the ViewModel
+        intents().subscribe(viewModel.intentsObserver::onNext)
     )
-    // Pass the UI's intents to the ViewModel
-    viewModel.processIntents(intents())
   }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    disposables.dispose()
+  
+  override fun onStop() {
+    super.onStop()
+    disposables.clear()
   }
 
   override fun intents(): Observable<StatisticsIntent> = initialIntent()
