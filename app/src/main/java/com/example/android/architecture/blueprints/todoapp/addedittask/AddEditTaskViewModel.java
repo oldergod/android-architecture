@@ -29,6 +29,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 
@@ -50,6 +51,8 @@ public class AddEditTaskViewModel extends ViewModel
     private PublishSubject<AddEditTaskIntent> mIntentsSubject;
     @NonNull
     private Observable<AddEditTaskViewState> mStatesObservable;
+    @NonNull
+    private CompositeDisposable mDisposables = new CompositeDisposable();
     /**
      * Contains and executes the business logic of all emitted actions.
      */
@@ -65,7 +68,7 @@ public class AddEditTaskViewModel extends ViewModel
 
     @Override
     public void processIntents(Observable<AddEditTaskIntent> intents) {
-        intents.subscribe(mIntentsSubject);
+        mDisposables.add(intents.subscribe(mIntentsSubject::onNext));
     }
 
     @Override
@@ -139,6 +142,11 @@ public class AddEditTaskViewModel extends ViewModel
         }
         // Fail for unhandled intents
         throw new IllegalArgumentException("do not know how to treat this intent " + intent);
+    }
+
+    @Override
+    protected void onCleared() {
+        mDisposables.dispose();
     }
 
     /**

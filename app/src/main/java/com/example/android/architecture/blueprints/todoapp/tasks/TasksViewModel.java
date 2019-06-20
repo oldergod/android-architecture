@@ -32,6 +32,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 
@@ -53,6 +54,8 @@ public class TasksViewModel extends ViewModel implements MviViewModel<TasksInten
     private PublishSubject<TasksIntent> mIntentsSubject;
     @NonNull
     private Observable<TasksViewState> mStatesObservable;
+    @NonNull
+    private CompositeDisposable mDisposables = new CompositeDisposable();
     /**
      * Contains and executes the business logic of all emitted actions.
      */
@@ -68,7 +71,7 @@ public class TasksViewModel extends ViewModel implements MviViewModel<TasksInten
 
     @Override
     public void processIntents(Observable<TasksIntent> intents) {
-        intents.subscribe(mIntentsSubject);
+        mDisposables.add(intents.subscribe(mIntentsSubject::onNext));
     }
 
     @Override
@@ -140,6 +143,11 @@ public class TasksViewModel extends ViewModel implements MviViewModel<TasksInten
             return TasksAction.ClearCompletedTasksAction.create();
         }
         throw new IllegalArgumentException("do not know how to treat this intent " + intent);
+    }
+
+    @Override
+    protected void onCleared() {
+        mDisposables.dispose();
     }
 
     /**

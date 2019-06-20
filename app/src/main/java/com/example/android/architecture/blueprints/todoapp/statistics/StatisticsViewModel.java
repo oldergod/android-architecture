@@ -28,6 +28,7 @@ import com.example.android.architecture.blueprints.todoapp.mvibase.MviViewState;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.subjects.PublishSubject;
 
@@ -49,6 +50,8 @@ public class StatisticsViewModel extends ViewModel
     private PublishSubject<StatisticsIntent> mIntentsSubject;
     @NonNull
     private Observable<StatisticsViewState> mStatesObservable;
+    @NonNull
+    private CompositeDisposable mDisposables = new CompositeDisposable();
     /**
      * Contains and executes the business logic of all emitted actions.
      */
@@ -64,7 +67,7 @@ public class StatisticsViewModel extends ViewModel
 
     @Override
     public void processIntents(Observable<StatisticsIntent> intents) {
-        intents.subscribe(mIntentsSubject);
+        mDisposables.add(intents.subscribe(mIntentsSubject::onNext));
     }
 
     @Override
@@ -118,6 +121,11 @@ public class StatisticsViewModel extends ViewModel
             return StatisticsAction.LoadStatistics.create();
         }
         throw new IllegalArgumentException("do not know how to treat this intent " + intent);
+    }
+
+    @Override
+    protected void onCleared() {
+        mDisposables.dispose();
     }
 
     /**
