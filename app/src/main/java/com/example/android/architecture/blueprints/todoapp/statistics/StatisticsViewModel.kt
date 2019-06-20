@@ -31,6 +31,7 @@ import com.example.android.architecture.blueprints.todoapp.statistics.Statistics
 import com.example.android.architecture.blueprints.todoapp.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -51,6 +52,7 @@ class StatisticsViewModel(
    */
   private val intentsSubject: PublishSubject<StatisticsIntent> = PublishSubject.create()
   private val statesObservable: Observable<StatisticsViewState> = compose()
+  private val disposables = CompositeDisposable()
 
   /**
    * take only the first ever InitialIntent and all intents of other types
@@ -67,7 +69,7 @@ class StatisticsViewModel(
     }
 
   override fun processIntents(intents: Observable<StatisticsIntent>) {
-    intents.subscribe(intentsSubject)
+    disposables.add(intents.subscribe(intentsSubject::onNext))
   }
 
   override fun states(): Observable<StatisticsViewState> = statesObservable
@@ -105,6 +107,10 @@ class StatisticsViewModel(
     return when (intent) {
       is StatisticsIntent.InitialIntent -> LoadStatisticsAction
     }
+  }
+
+  override fun onCleared() {
+    disposables.dispose()
   }
 
   companion object {

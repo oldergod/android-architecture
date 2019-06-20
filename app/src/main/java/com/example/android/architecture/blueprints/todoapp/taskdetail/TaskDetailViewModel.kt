@@ -37,6 +37,7 @@ import com.example.android.architecture.blueprints.todoapp.taskdetail.TaskDetail
 import com.example.android.architecture.blueprints.todoapp.util.notOfType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
@@ -57,6 +58,7 @@ class TaskDetailViewModel(
    */
   private val intentsSubject: PublishSubject<TaskDetailIntent> = PublishSubject.create()
   private val statesObservable: Observable<TaskDetailViewState> = compose()
+  private val disposables = CompositeDisposable()
 
   /**
    * take only the first ever InitialIntent and all intents of other types
@@ -73,7 +75,7 @@ class TaskDetailViewModel(
     }
 
   override fun processIntents(intents: Observable<TaskDetailIntent>) {
-    intents.subscribe(intentsSubject)
+    disposables.add(intents.subscribe(intentsSubject::onNext))
   }
 
   override fun states(): Observable<TaskDetailViewState> = statesObservable
@@ -114,6 +116,10 @@ class TaskDetailViewModel(
       is TaskDetailIntent.ActivateTaskIntent -> ActivateTaskAction(intent.taskId)
       is TaskDetailIntent.CompleteTaskIntent -> CompleteTaskAction(intent.taskId)
     }
+  }
+
+  override fun onCleared() {
+    disposables.dispose()
   }
 
   companion object {
