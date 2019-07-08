@@ -2,7 +2,7 @@
 
 ### Java Version
 
-You can fin the Java version of this app [here](https://github.com/oldergod/android-architecture/tree/todo-mvi-rxjava).
+You can find the Java version of this app [here](https://github.com/oldergod/android-architecture/tree/todo-mvi-rxjava).
 
 ### Contributors
 
@@ -10,7 +10,7 @@ You can fin the Java version of this app [here](https://github.com/oldergod/andr
 
 ### Summary
 
-This version of the app is called TODO-MVI-RxJava-Kotlin. It is based on an Android ported version of the Model-View-Intent architecture and uses RxJava to implement the reactive caracteristic of the architecture. It is initially a fork of the [TODO-MVP-RXJAVA](https://github.com/googlesamples/android-architecture/tree/todo-mvp-rxjava).
+This version of the app is called TODO-MVI-RxJava-Kotlin. It is based on an Android ported version of the Model-View-Intent architecture and uses RxJava to implement the reactive characteristic of the architecture. It is initially a fork of the [TODO-MVP-RXJAVA](https://github.com/googlesamples/android-architecture/tree/todo-mvp-rxjava).
 
 The MVI architecture embraces reactive and functional programming. The two main components of this architecture, the _View_ and the _ViewModel_ can be seen as functions, taking an input and emiting outputs to each other. The _View_ takes input from the _ViewModel_ and emit back _intents_. The _ViewModel_ takes input from the _View_ and emit back _view states_. This means the _View_ has only one entry point to forward data to the _ViewModel_ and vice-versa, the _ViewModel_ only has one way to pass information to the _View_.  
 This is reflected in their API. For instance, The _View_ has only two exposed methods:
@@ -41,7 +41,7 @@ A _ViewModel_ will a) process the _intents_ of the _View_, and b) emit a _view s
 
 ### The User is a function
 
-The MVI architecture sees the user as part of the data flow, a functionnal component taking input from the previous one and emitting event to the next. The user receives an input―the screen from the application―and ouputs back events (touch, click, scroll...). On Android, the input/output of the UI is at the same place; either physically as everything goes through the screen or in the program: I/O inside the activity or the fragment. Including the User to seperate the input of the view from its output helps keeping the code healty.
+The MVI architecture sees the user as part of the data flow, a functional component taking input from the previous one and emitting event to the next. The user receives an input―the screen from the application―and outputs back events (touch, click, scroll...). On Android, the input/output of the UI is at the same place; either physically as everything goes through the screen or in the program: I/O inside the activity or the fragment. Including the User to seperate the input of the view from its output helps keeping the code healty.
 
 <img src="https://raw.githubusercontent.com/oldergod/android-architecture/todo-mvi-rxjava-kotlin/art/MVI_detail.png" alt="Model-View-Intent architecture in details"/>
 
@@ -152,7 +152,7 @@ Similar with TODO-MVP. There is actually no addition, nor change compared to the
 
 ### Code metrics
 
-Compared to TODO-MVP, new classes were added for 1) setting the interfaces to help writing the MVI architecture and its components, 2) providing the ViewModel instances via the `ViewModelFactory`, and 3) handing the `Schedulers` that provide the working threads. This amount of code is actually one big downside of this architecture but can easily be tackled by using [Kotlin](http://kotlinlang.org/).
+Compared to TODO-MVP, new classes were added for 1) setting the interfaces to help writing the MVI architecture and its components, 2) providing the ViewModel instances via the `ViewModelFactory`, and 3) handling the `Schedulers` that provide the working threads. This amount of code is actually one big downside of this architecture but can easily be tackled by using [Kotlin](http://kotlinlang.org/).
 
 ```
 -------------------------------------------------------------------------------
